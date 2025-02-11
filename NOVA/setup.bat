@@ -16,6 +16,9 @@ call venv\Scripts\activate
 
 echo Instalando dependencias...
 pip install -r requirements.txt
+pip install SpeechRecognition
+pip install PyAudio
+pip install pyttsx3
 
 echo Configuración completada! Para iniciar NOVA, ejecuta 'run.bat'
 pause
