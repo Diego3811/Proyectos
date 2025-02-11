@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA - Neural Operative Virtual Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="ai-interface">
+            <h1 class="nova-title">NOVA</h1>
+            <p class="nova-subtitle">Neural Operative Virtual Assistant</p>
+            <div class="circle-container">
+                <div class="outer-circle"></div>
+                <div class="inner-circle"></div>
+                <div class="core-circle"></div>
+            </div>
+            <div class="response-area">
+                <p id="ai-response">Esperando comando...</p>
+            </div>
+            <button id="start-btn" class="pulse-button">
+                Iniciar
+            </button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
