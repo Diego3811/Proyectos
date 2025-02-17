@@ -23,11 +23,11 @@
                 </button>
                 
                 <ul class="nav-list">
-                    <li><a href="#" class="nav-link">Inicio</a></li>
-                    <li><a href="#" class="nav-link">Servicios</a></li>
-                    <li><a href="#" class="nav-link">Quienes Somos</a></li>
-                    <li><a href="#" class="nav-link">Blog</a></li>
-                    <li><a href="#" class="nav-link">Contacto</a></li>
+                    <li><a href="#inicio" id="Inicio" class="nav-link">Inicio</a></li>
+                    <li><a href="#servicios" id="Servicios"class="nav-link">Servicios</a></li>
+                    <li><a href="#quienes-somos" id="quienes-somos" class="nav-link">Quienes Somos</a></li>
+                    <li><a href="#blog" id="Blog" class="nav-link">Blog</a></li>
+                    <li><a href="#contacto" id="Contacto" class="nav-link">Contacto</a></li>
                 </ul>
             </nav>
         </div>
@@ -248,9 +248,10 @@
                 </div>
                 
                 <h4 class="footer-title newsletter-title">Newsletter</h4>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Tu email" required>
-                    <button type="submit">Suscribirse</button>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" name="email" placeholder="Tu email" required>
+                    <button type="submit" id="submitBtn">Suscribirse</button>
+                    <div class="form-message"></div>
                 </form>
             </div>
         </div>
