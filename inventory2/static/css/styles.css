@@ -1,0 +1,50 @@
+.summary-card {
+    transition: transform 0.3s ease;
+    min-height: 150px;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+    cursor: pointer;
+}
+
+.navbar {
+    padding: 1rem 0;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.badge {
+    font-size: 0.9em;
+    padding: 0.5em 0.75em;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+}
+
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    min-width: 300px;
+}
+
+.table th {
+    border-top: none;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+    vertical-align: middle;
+}

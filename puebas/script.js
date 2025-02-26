@@ -75,3 +75,29 @@ function showMessage(text, type = 'success') {
 }
 
 newsletterForm.addEventListener('submit', handleSubmit);
+
+
+
+//*! Abrir Modal  */
+var modal = document.getElementById("modalForm");
+
+var btn = document.getElementById("openModal");
+
+
+var span = document.getElementById("closeModal");
+
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}

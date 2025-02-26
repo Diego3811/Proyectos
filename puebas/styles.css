@@ -1,5 +1,5 @@
 :root {
-    /* Colores principales */
+    /** Colores principales */
     --bg-dark: #1a1a1a;
     --card-bg: #252525;
     --border-dark: #333;
@@ -8,12 +8,12 @@
     --text-gray: #e0e0e0;
     --error: #ff4d4d;
     
-    /* RGB para transparencias */
+    /** RGB para transparencias */
     --accent-rgb: 0, 255, 157;
     --black-rgb: 0, 0, 0;
 }
 
-/* Reset básico */
+/** Reset básico */
 * {
     scroll-behavior: smooth;
     margin: 0;
@@ -147,7 +147,7 @@
     }
 }
 
-/* Sección Hero */
+/** Sección Hero */
 .hero {
     height: 100vh;
     background: linear-gradient(rgba(var(--black-rgb), 0.7), rgba(var(--black-rgb), 0.7)),
@@ -157,7 +157,7 @@
     display: flex;
     align-items: center;
     position: relative;
-    margin-top: 70px;
+    margin-top: 0%;
 }
 
 .hero-content {
@@ -248,7 +248,7 @@
     }
 }
 
-/* Sección Servicios */
+/** Sección Servicios */
 .services {
     background: var(--bg-dark);
     padding: 6rem 0;
@@ -337,7 +337,7 @@
     }
 }
 
-/* Sección Quienes Somos */
+/** Sección Quienes Somos */
 .about {
     background: var(--bg-dark);
     padding: 6rem 0;
@@ -380,7 +380,7 @@
     font-size: 1.1rem;
 }
 
-/* Sección Testimonios */
+/** Sección Testimonios */
 .testimonials {
     background: var(--card-bg);
     padding: 6rem 0;
@@ -486,7 +486,7 @@
     }
 }
 
-/* Sección Blog */
+/** Sección Blog */
 .blog {
     background: var(--card-bg);
     padding: 6rem 0;
@@ -552,7 +552,7 @@
     margin-right: 5px;
 }
 
-/* Footer */
+/** Footer */
 .main-footer {
     background: var(--bg-dark);
     padding: 4rem 0 0;
@@ -700,7 +700,13 @@
     color: var(--accent);
 }
 
-/* Formulario */
+/** Formulario */
+
+.register-form{
+    border: 1px solid #000;
+    justify-content: center;
+    align-items: center;
+}
 .form-message {
     color: var(--accent);
     font-size: 0.9rem;
@@ -795,4 +801,42 @@ section {
     section {
         scroll-margin-top: 80px;
     }
+}
+
+/** Modal de registro */
+.modal {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.8); 
+    display: flex;
+}
+
+.modal-content {
+    background-color: #fefefed7;
+    margin: 10% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%; 
+    max-width: 500px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.);
+}
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close-button:hover,
+.close-button:focus {
+    color: rgb(227, 8, 8);
+    text-decoration: none;
+    cursor: pointer;
 }
