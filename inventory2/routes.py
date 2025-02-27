@@ -19,6 +19,10 @@ def role_required(role):
     return decorator
 
 @bp.route('/')
+def index():
+    return render_template('login.html')
+
+@bp.route('/login')
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('main.dashboard'))
@@ -37,11 +41,12 @@ def login_post():
     login_user(user)
     return redirect(url_for('main.dashboard'))
 
-@bp.route('/logout')
-@login_required
+@bp.route('/logout', methods=['GET', 'POST'])
 def logout():
     logout_user()
-    return redirect(url_for('main.login'))
+    return redirect(url_for('main.index'))
+
+    
 
 @bp.route('/dashboard')
 @login_required
@@ -66,26 +71,38 @@ def dashboard():
 def add_product():
     if request.method == 'POST':
         try:
-            new_product = Product(
-                name=request.form.get('name'),
-                category=request.form.get('category'),
-                quantity=int(request.form.get('quantity')),
-                price=float(request.form.get('price')),
-                minimum_stock=int(request.form.get('minimum_stock')),
-                description=request.form.get('description')
-            )
-            db.session.add(new_product)
-            db.session.commit()
-            flash('Producto agregado exitosamente', 'success')
+            name = request.form.get('name')
+            # Buscar si el producto ya existe
+            existing_product = Product.query.filter_by(name=name).first()
+            
+            if existing_product:
+                # Actualizar cantidad existente
+                existing_product.quantity += int(request.form.get('quantity'))
+                existing_product.price = float(request.form.get('price'))  # Actualizar precio
+                existing_product.category = request.form.get('category')   # Actualizar categoría
+                db.session.commit()
+                flash('✅ Cantidad del producto actualizada exitosamente', 'success')
+            else:
+                # Crear nuevo producto
+                new_product = Product(
+                    name=name,
+                    category=request.form.get('category'),
+                    quantity=int(request.form.get('quantity')),
+                    price=float(request.form.get('price')),
+                    minimum_stock=int(request.form.get('minimum_stock', 5)),
+                    description=request.form.get('description', '')
+                )
+                db.session.add(new_product)
+                db.session.commit()
+                flash('✅ Producto creado exitosamente', 'success')
+            
             return redirect(url_for('main.dashboard'))
+
+        except ValueError:
+            db.session.rollback()
+            flash('❌ Error: Valores numéricos inválidos', 'danger')
         except Exception as e:
             db.session.rollback()
-            flash(f'Error al agregar el producto: {str(e)}', 'danger')
+            flash(f'❌ Error inesperado: {str(e)}', 'danger')
     
     return render_template('add_product.html')
-
-@bp.route('/manage-users')
-@role_required('superadmin')
-def manage_users():
-    users = User.query.all()
-    return render_template('users.html', users=users)

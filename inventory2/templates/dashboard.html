@@ -3,39 +3,108 @@
 {% block content %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="#">
-            <i class="fas fa-warehouse me-2"></i>Inventario
+        <a class="navbar-brand" href="{{ url_for('bp.dashboard') }}">
+            <i class="fas fa-warehouse me-2"></i>Inventarios
         </a>
+        
         <div class="d-flex align-items-center">
-            <span class="text-light me-3">{{ current_user.username }}</span>
-            <a href="{{ url_for('main.logout') }}" class="btn btn-light">
-                <i class="fas fa-sign-out-alt me-2"></i>Salir
-            </a>
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                    <i class="fas fa-user-circle me-2"></i>{{ current_user.username }}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a href="{{ url_for('bp.manage_users') }}" class="dropdown-item">
+                            <i class="fas fa-cog me-2"></i>Configuración
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form action="{{ url_for('bp.logout') }}" method="POST">
+                            <button type="submit" class="dropdown-item text-danger">
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
 
 <main class="container my-5">
-    <div class="d-flex justify-content-between mb-4">
-        <h2>Panel de Control</h2>
-        {% if current_user.role == 'superadmin' %}
-        <a href="{{ url_for('main.add_product') }}" class="btn btn-success">
-            <i class="fas fa-plus me-2"></i>Nuevo Producto
-        </a>
-        {% endif %}
+    <!-- Resumen Estadístico -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Productos Totales</h5>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-boxes fa-2x text-primary me-3"></i>
+                        <h2 class="mb-0">{{ total_products }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-warning">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Bajo Stock</h5>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle fa-2x text-warning me-3"></i>
+                        <h2 class="mb-0">{{ low_stock }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-danger">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Agotados</h5>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-times-circle fa-2x text-danger me-3"></i>
+                        <h2 class="mb-0">{{ out_of_stock }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Categorías</h5>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-tags fa-2x text-success me-3"></i>
+                        <h2 class="mb-0">{{ total_categories }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-
-    <!-- Nueva sección de lista de productos -->
-    <div class="row mt-5">
+    <!-- Barra de Búsqueda -->
+    <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title mb-4">
-                        <i class="fas fa-boxes me-2"></i>Inventario Completo
-                    </h5>
-                    
-                    <div class="table-responsive">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" 
+                               placeholder="Buscar producto por nombre..." 
+                               aria-label="Buscar producto">
+                        <button class="btn btn-primary" type="button" id="searchButton">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Productos Dinámica -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div id="productsTable">
                         <table class="table table-hover">
                             <thead class="table-light">
                                 <tr>
@@ -49,35 +118,8 @@
                                     {% endif %}
                                 </tr>
                             </thead>
-                            <tbody>
-                                {% for product in products %}
-                                <tr>
-                                    <td>{{ product.name }}</td>
-                                    <td>{{ product.category }}</td>
-                                    <td>{{ product.quantity }}</td>
-                                    <td>{{ product.minimum_stock }}</td>
-                                    <td>
-                                        <span class="badge 
-                                            {% if product.quantity == 0 %}bg-danger
-                                            {% elif product.quantity < product.minimum_stock %}bg-warning
-                                            {% else %}bg-success{% endif %}">
-                                            {% if product.quantity == 0 %}Agotado
-                                            {% elif product.quantity < product.minimum_stock %}Bajo Stock
-                                            {% else %}Disponible{% endif %}
-                                        </span>
-                                    </td>
-                                    {% if current_user.role == 'superadmin' %}
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    </td>
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
+                            <tbody id="productsTableBody">
+                                {% include 'search_results.html' %}
                             </tbody>
                         </table>
                     </div>
@@ -85,5 +127,120 @@
             </div>
         </div>
     </div>
+
+    <!-- Actividad Reciente y Acciones Rápidas -->
+    <div class="row g-4 mt-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4"><i class="fas fa-history me-2"></i>Actividad Reciente</h5>
+                    <div class="list-group">
+                        {% for log in recent_activity %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">#{{ log.id }}</small>
+                                <small class="text-muted">{{ log.timestamp.strftime('%d/%m/%Y %H:%M') }}</small>
+                            </div>
+                            <div class="mt-2">{{ log.description }}</div>
+                        </div>
+                        {% else %}
+                        <div class="text-center text-muted py-3">
+                            No hay actividad reciente
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4"><i class="fas fa-bolt me-2"></i>Acciones Rápidas</h5>
+                    <div class="d-grid gap-2">
+                        {% if current_user.role == 'superadmin' %}
+                        <a href="{{ url_for('bp.add_product') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Nuevo Producto
+                        </a>
+                        {% endif %}
+                        <a href="{{ url_for('bp.index') }}" class="btn btn-success">
+                            <i class="fas fa-file-excel me-2"></i>Exportar Excel
+                        </a>
+                        <a href="{{ url_for('bp.logout') }}" class="btn btn-info">
+                            <i class="fas fa-chart-bar me-2"></i>Generar Reporte
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
+
+<!-- Footer -->
+<footer class="bg-light mt-5 py-4">
+    <div class="container text-center text-muted">
+        <small>
+            Sistema de Gestión de Inventarios © 2024 • 
+            <a href="{{ url_for('bp.edit_product') }}" class="text-decoration-none">Reportar un problema</a>
+        </small>
+    </div>
+</footer>
+
+<!-- Script de Búsqueda en Tiempo Real con AJAX -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const tbody = document.getElementById('productsTableBody');
+
+    const debounce = (func, delay) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    };
+
+    const updateTable = async (query) => {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        try {
+            const response = await fetch(`/search_products?q=${encodeURIComponent(query)}`);
+            if (!response.ok) throw new Error('Error en la respuesta');
+            const data = await response.text();
+            tbody.innerHTML = data;
+        } catch (error) {
+            console.error('Error:', error);
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center text-danger py-4">
+                        Error al cargar los resultados. Intente nuevamente.
+                    </td>
+                </tr>
+            `;
+        }
+    };
+
+    // Eventos
+    searchInput.addEventListener('input', debounce((e) => {
+        updateTable(e.target.value.trim());
+    }, 300));
+
+    searchButton.addEventListener('click', () => {
+        updateTable(searchInput.value.trim());
+    });
+
+    // Carga inicial
+    updateTable('');
+});
+</script>
+
 {% endblock %}

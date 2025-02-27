@@ -10,20 +10,37 @@
 </nav>
 
 <main class="container my-5">
-    <div class="card shadow">
-        <div class="card-body">
-            <h4 class="card-title mb-4">
-                <i class="fas fa-cube me-2"></i>Nuevo Producto
-            </h4>
+
+    
+
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="mb-4">
+                    <i class="fas fa-plus-circle me-2"></i>Nuevo Producto
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary float-end">
+                        <i class="fas fa-arrow-left me-2"></i>Regresar
+                    </a>
+                </h2>
+            
             <form method="POST">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label">Nombre del Producto</label>
                         <input type="text" name="name" class="form-control" required>
                     </div>
-                    <div class="col-md-6">
+                    <div class="mb-3">
                         <label class="form-label">Categoría</label>
-                        <input type="text" name="category" class="form-control" required>
+                        <select class="form-select" name="category" required>
+                            <option value="" disabled selected>Selecciona una categoría</option>
+                            <option value="Electrónica">Baño</option>
+                            <option value="Ropa">Vidrios</option>
+                            <option value="Hogar">Hogar</option>
+                            <option value="Oficina">Oficina</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor selecciona una categoría válida
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Cantidad</label>
@@ -52,3 +69,10 @@
     </div>
 </main>
 {% endblock %}
+
+{% if existing_product %}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle me-2"></i>
+    Producto existente: Stock actual = {{ existing_product.quantity }}
+</div>
+{% endif %}
